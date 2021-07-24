@@ -1,7 +1,9 @@
 import Header from "./components/Header";
 import Tasks from "./components/Tasks";
+import TaskInput from "./components/TaskInput";
 import { useState } from "react";
 function App() {
+  const [isShowInput, setIsShowInput] = useState(false);
   const [tasks, setTasks] = useState([
     {
       id: "1",
@@ -26,6 +28,7 @@ function App() {
   const deleteTask = (id) => {
     setTasks(tasks.filter((task) => task.id !== id));
   };
+
   // Toggle reminder
   const toggleReminder = (id) => {
     setTasks(
@@ -34,9 +37,17 @@ function App() {
       )
     );
   };
+
+  const addTask = (task) => {
+    console.log(task);
+  };
   return (
     <div className="container">
-      <Header />
+      <Header
+        onAdd={() => setIsShowInput(!isShowInput)}
+        displayInput={isShowInput}
+      />
+      {isShowInput && <TaskInput onAdd={addTask} />}
       {tasks.length > 0 ? (
         <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} />
       ) : (
