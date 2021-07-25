@@ -1,5 +1,5 @@
 import { useState } from "react";
-const TaskInput = ({onAdd}) => {
+const TaskInput = ({ onAdd }) => {
   const [text, setText] = useState();
   const [day, setDay] = useState();
   const [reminder, setReminder] = useState();
@@ -29,7 +29,7 @@ const TaskInput = ({onAdd}) => {
           onChange={(e) => {
             setText(e.target.value);
           }}
-        ></input>
+        />
       </div>
       <div className="form-control">
         <label>Date & Time</label>
@@ -47,11 +47,11 @@ const TaskInput = ({onAdd}) => {
         <input
           type="checkbox"
           value={reminder}
-          checked={true}
+          checked={reminder}
           onChange={(e) => {
             setReminder(e.currentTarget.checked);
           }}
-        ></input>
+        />
       </div>
       <input type="submit" value="Save" className="btn btn-block" />
     </form>

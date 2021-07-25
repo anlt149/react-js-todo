@@ -1,46 +1,60 @@
+import { useEffect, useState } from "react";
+import taskApi from "./api/taskApi";
 import Header from "./components/Header";
-import Tasks from "./components/Tasks";
 import TaskInput from "./components/TaskInput";
-import { useState } from "react";
+import Tasks from "./components/Tasks";
+
 function App() {
   const [isShowInput, setIsShowInput] = useState(false);
-  const [tasks, setTasks] = useState([
-    {
-      id: "1",
-      text: "ABC",
-      day: "2021/07/24",
-      reminder: true,
-    },
-    {
-      id: "2",
-      text: "DEF",
-      day: "2021/07/24",
-      reminder: true,
-    },
-    {
-      id: "3",
-      text: "GHK",
-      day: "2021/07/24",
-      reminder: true,
-    },
-  ]);
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const getAllTasks = async () => {
+      const tasks = await fetchTasks();
+      setTasks(tasks);
+    };
+    getAllTasks();
+  }, []);
+
+  // Fetch tasks from api
+  const fetchTasks = async () => {
+    const res = await taskApi.fetch();
+    return res ? res : null;
+  };
+
+  // Fetch tasks from api
+  const getTaskById = async (id) => {
+    const res = await taskApi.getTaskById(id);
+    return res ? res : null;
+  };
+
   // Delete task on click
-  const deleteTask = (id) => {
+  const deleteTask = async (id) => {
+    await taskApi.delete(id);
     setTasks(tasks.filter((task) => task.id !== id));
   };
 
   // Toggle reminder
-  const toggleReminder = (id) => {
+  const toggleReminder = async (id) => {
+    const taskToToggle = await getTaskById(id);
+    const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder };
     setTasks(
       tasks.map((task) =>
         task.id === id ? { ...task, reminder: !task.reminder } : task
       )
     );
+    // Call api
+    await taskApi.update(id, updTask);
   };
 
-  const addTask = (task) => {
-    console.log(task);
+  // Add task
+  const addTask = async (task) => {
+    const res = taskApi.add(task);
+    // Re-render list
+    // TODO In case res is null setTasks still working normally?
+    setTasks([...tasks, res]);
   };
+
   return (
     <div className="container">
       <Header
