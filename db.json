@@ -3,7 +3,7 @@
     {
       "text": "anlt",
       "day": "123",
-      "reminder": false,
+      "reminder": true,
       "id": 1
     },
     {

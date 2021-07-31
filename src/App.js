@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import taskApi from "./api/taskApi";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
 import Header from "./components/Header";
+import Footer from "./components/Footer";
+import About from "./components/About";
 import TaskInput from "./components/TaskInput";
 import Tasks from "./components/Tasks";
 
@@ -56,18 +60,35 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <Header
-        onAdd={() => setIsShowInput(!isShowInput)}
-        displayInput={isShowInput}
-      />
-      {isShowInput && <TaskInput onAdd={addTask} />}
-      {tasks.length > 0 ? (
-        <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} />
-      ) : (
-        "Congratz! No tasks left, add some more."
-      )}
-    </div>
+    <Router>
+      <div className="container">
+        <Header
+          onAdd={() => setIsShowInput(!isShowInput)}
+          displayInput={isShowInput}
+        />
+
+        <Route
+          path="/"
+          exact
+          render={(props) => (
+            <>
+              {isShowInput && <TaskInput onAdd={addTask} />}
+              {tasks.length > 0 ? (
+                <Tasks
+                  tasks={tasks}
+                  onDelete={deleteTask}
+                  onToggle={toggleReminder}
+                />
+              ) : (
+                "Congratz! No tasks left, add some more."
+              )}
+            </>
+          )}
+        />
+        <Route path="/about" component={About} />
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
